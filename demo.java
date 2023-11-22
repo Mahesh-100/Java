@@ -23,6 +23,26 @@ public class demo{
            System.out.println(s);
             System.out.println(s instanceof String);
         System.out.println(s.getClass().getName());
+        //Operators
+        int x=43;
+        int y=35;
+        int z=Math.max(x,y);
+        int a=Math.min(x,y);
+    	  System.out.println(x+y);
+        System.out.println(x-y);
+        System.out.println(x*y);
+        System.out.println(x/y);
+        System.out.println(y%x);
+        System.out.println(x+=x);
+        System.out.println(x-=20);
+        System.out.println(x*=3);
+        System.out.println(--y);
+        System.out.println(x&=y);
+        System.out.println(x|=y);
+        System.out.println(y^x);
+        System.out.println(x++);
+        System.out.println(z);
+        System.out.println(a);
            
            
     }
