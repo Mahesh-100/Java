@@ -1,5 +1,6 @@
 public class demo{
     public static void main(String args[]){
+        // data types
         int myNum=5;
         float myFloat= 5.4f;
         char myLetter= 'M';
