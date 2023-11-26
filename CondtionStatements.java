@@ -1,5 +1,4 @@
 import java.util.Scanner;
-
 public class CondtionStatements{
 
     public static void main(String[] args) {
@@ -44,7 +43,5 @@ public class CondtionStatements{
         // ternary operator
         String res=(num==0)?"zero":((num%2==0)?"even":"odd");
         System.out.println(res+" using ternary operator");
-
     }
-
 }
