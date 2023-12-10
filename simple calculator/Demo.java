@@ -9,6 +9,7 @@ public class Demo {
         int y=z.nextInt();
         System.out.println("Enter the operator(+,-,*,/):");
         String op=z.next();
+       
         int c=0;
         Calculater calc=new Calculater(x,y);
         
@@ -22,5 +23,8 @@ public class Demo {
                 break;
         }
         System.out.println(x+op+y+"="+c);
+    }
+
+    private static void close() {
     }
 }
