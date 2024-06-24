@@ -1,96 +1,82 @@
 package com.exceptionHandling;
 
+
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Scanner;
+import java.util.Set;
 
 public class Demo {
 
-	public static void main(String[] args)  {
+	public static void main(String[] args)    {
+     
+		String path="C:\\Users\\Durgasi Mahesh kumar\\Documents\\file.txt";
 		
 		try {
-			String path="C:\\Users\\bharg\\Documents\\file1.doc";
-			//createFile(path);
-			//getInformation(path);
-			//writeToFile(path);
-			//readFile(path);
-			deleteFile(path);
-			int rs=division(25,5);
-			System.out.println(rs);	
-			int eve=Unknown(2);
-			System.out.println(eve);
+			List<Integer>numsList=negativeNumsCheckInFile(path);
+			checkduplicate(numsList);
+			Iterator<Integer>it=numsList.iterator();
+			while(it.hasNext()) {
+				  System.out.println(it.next());
+				}
 			
+			//readFile(path);
 		}catch(ArithmeticException e) {
 			System.out.println(e.getMessage());
-		} 
+		}catch(NullPointerException e) {
+			System.out.println(e.getMessage());
+		} catch (Duplicate_Exception e) {
+			System.out.println(e.getMessage());
+		
+			
+		}
+		
+	}
 
-	}
-public static int division(int a,int b) {
-	if(b==0) {
-		throw new ArithmeticException("Cannot divide by Zero");
-	}
-	return a/b;
-}
-public static int Unknown(int a)  {
-	if(a%2!=0) {
-		throw new ArithmeticException("Please provide only Even number");
-	}
-	return a;
-}
-public static void createFile(String filepath) {
-	File file=new File(filepath);
-	try {
-		if(file.createNewFile()) {
-			System.out.println("File created successfully: "+file.getAbsolutePath());
-		}else {
-			System.out.println("File already exists.");
+	public static void readFile(String filepath) {
+		File file=new File(filepath);
+		try {
+			Scanner sc=new Scanner(file);
+		if(!sc.hasNextLine()) {
+			throw new NullPointerException("File can not be empty");
 		}
-	}catch(IOException e) {
-		System.out.println("An error occured: "+e.getMessage());
-		e.printStackTrace();
-	}
-}
-public static void getInformation(String filepath) {
-	File file=new File(filepath);
-	if(file.exists()) {
-		System.out.println("The name of the file: "+file.getName());
-		System.out.println("The absolute path of the file:"+ file.getAbsolutePath());
-		System.out.println("Is file writeable?"+file.canWrite());
-		System.out.println("is file readable?"+file.canRead());
-		System.out.println("The size of the file: "+file.length());
-	}else {
-		System.out.println("the file does not exist");
-	}
-}
-public static void writeToFile(String filepath) throws IOException {
-	FileWriter fw=new FileWriter(filepath);
-	fw.write("you will be great one day....keep fighting....keep doing....");
-	fw.close();
-	System.out.println("Content added succesully");
-}
-public static void readFile(String filepath) {
-	File file=new File(filepath);
-	try {
-		Scanner dataReader=new Scanner(file);
-		while(dataReader.hasNext()) {
-			String fileData=dataReader.nextLine();
-			System.out.println(fileData);
+		sc.close();
+		} catch (FileNotFoundException e) {
+			System.out.println("File doest not exist....");
+			e.printStackTrace();
 		}
-		dataReader.close();
-	} catch (FileNotFoundException e) {
-		System.out.println("File does not exist");
-		e.printStackTrace();
 	}
-}
-public static void deleteFile(String filepath) {
-	File file=new File(filepath);
-	if(file.delete()) {
-		System.out.println("file deleted successfully...");
+	
+	public static List<Integer> negativeNumsCheckInFile(String filepath)   {
+		File file=new File(filepath);
+		List<Integer> nums=new ArrayList<Integer>();
+		
+		try (Scanner sc = new Scanner(file)) {
+			while(sc.hasNextLine()) {
+				int num=Integer.parseInt(sc.nextLine());
+				nums.add(num);
+			}
+			sc.close();
+		} 
+			catch (FileNotFoundException e) {
+		
+			System.out.println("File doest not exist....");
+			e.printStackTrace();
+		}
+		return nums;
+		
 	}
-	else {
-		System.out.println("something went wrong");
+	public static void checkduplicate(List<Integer> list) throws Duplicate_Exception {
+	    Set<Integer>uniqueNumbers=new HashSet<Integer>();
+	    for(int num:list) {
+	    	if(uniqueNumbers.contains(num)) {
+	    		throw new Duplicate_Exception("Duplicates are found");
+	    	}
+	    	uniqueNumbers.add(num);
+	    }
 	}
-}
 }
