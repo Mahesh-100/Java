@@ -12,8 +12,10 @@ public interface UserServiceIn {
 	
 	 public List<UserResponse> findAll();
 	 
-	public UserResponse findByEmail(String email);
+	public UserResponse findByEmail(String email,String password);
 
 	public void deleteById(long userId);
+	
+	public UserResponse findById(Long id);
 
 }

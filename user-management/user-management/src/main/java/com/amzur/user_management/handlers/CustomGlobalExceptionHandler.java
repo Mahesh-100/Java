@@ -24,4 +24,24 @@ public class CustomGlobalExceptionHandler {
         });
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }
+	
+	@ExceptionHandler(ResourceNotAvailable.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ResponseEntity<?> handleResourceNotFound(ResourceNotAvailable ex) {
+        
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+    }
+	
+	@ExceptionHandler(UserNotFound.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ResponseEntity<?> handleLoginUser(UserNotFound ex) {
+        
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+    }
+	@ExceptionHandler(UserAlreadyExist.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ResponseEntity<?> handleAlreadyExistUser(UserAlreadyExist ex) {
+        
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+    }
 }

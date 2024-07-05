@@ -1,15 +1,20 @@
+
 package com.amzur.user_management.service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.amzur.user_management.constants.ApplicationConstants;
 import com.amzur.user_management.dto.request.UserRequest;
 import com.amzur.user_management.dto.response.UserResponse;
 import com.amzur.user_management.entities.UserEntity;
+import com.amzur.user_management.handlers.ResourceNotAvailable;
+import com.amzur.user_management.handlers.UserAlreadyExist;
 import com.amzur.user_management.repository.UserRepository;
 @Service
 public class UserService implements UserServiceIn{
@@ -21,18 +26,30 @@ public class UserService implements UserServiceIn{
                                                                    
 	@Override
 	public UserResponse save(UserRequest userRequest) {
-		UserEntity userEntity=new UserEntity();
-		BeanUtils.copyProperties(userRequest, userEntity);
-		userEntity=userRepository.save(userEntity);
+		 Optional<UserEntity> existingUser = userRepository.findByEmailAndPassword(userRequest.getEmail(), userRequest.getPassword());
+		 
+		 if(existingUser.isPresent()) {
+			 throw new UserAlreadyExist(ApplicationConstants.USER_ALREADY_EXIST);
+		 }else {
+			 UserEntity userEntity=new UserEntity();
+				BeanUtils.copyProperties(userRequest, userEntity);
+				userEntity=userRepository.save(userEntity);
+				 return convertEntityToResponse(userEntity);
+		 }
+		
+		
 //		UserResponse userResponse=new UserResponse();
 //		BeanUtils.copyProperties(userEntity, userResponse);
-	  return convertEntityToResponse(userEntity);
+	 
 		
 	}
 
 	@Override
-	public UserResponse findByEmail(String email) {
-		UserEntity userEntity=userRepository.findByEmail(email);
+	public UserResponse findByEmail(String email,String password) {
+		UserEntity userEntity=userRepository.findByEmailAndPassword(email,password).orElseThrow(()->new ResourceNotAvailable(ApplicationConstants.USER_NOT_FOUND));
+				
+		return convertEntityToResponse(userEntity);
+		
 		//UserResponse userResponse=new UserResponse();
 		
 		
@@ -45,7 +62,7 @@ public class UserService implements UserServiceIn{
 		
 		
 		//BeanUtils.copyProperties(userEntity, userResponse);
-		return convertEntityToResponse(userEntity);
+	
 	}
 
 	@Override
@@ -63,8 +80,22 @@ public class UserService implements UserServiceIn{
 
 	@Override
 	public void deleteById(long userId) {
-		userRepository.deleteById(userId);
+		  UserResponse userResponse=findById(userId);
+		
+		userRepository.deleteById(userResponse.getUserId());
 
+	}
+	@Override
+	public UserResponse findById(Long id) {
+		UserEntity userEntity=userRepository.findById(id).orElseThrow(()->new  ResourceNotAvailable(ApplicationConstants.RESOURCE_NOT_FOUND));
+//		if(userEntityopt.isPresent()) {
+//			userEntity=userEntityopt.get();
+//			return convertEntityToResponse(userEntity);
+//		}else {
+//			throw new ResourceNotAvailable("User Not Found");
+//		}
+		return convertEntityToResponse(userEntity);
+	
 	}
 	
 	public UserResponse convertEntityToResponse(UserEntity userEntity) {
@@ -72,6 +103,8 @@ public class UserService implements UserServiceIn{
 		BeanUtils.copyProperties(userEntity, userReponse);
 		return userReponse;
 	}
+
+	
 
 	
 

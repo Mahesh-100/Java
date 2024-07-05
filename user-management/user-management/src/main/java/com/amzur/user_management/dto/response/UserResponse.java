@@ -9,7 +9,7 @@ public class UserResponse {
 	private String name;
 	private String phoneNumber;
 	private String email;
-	private String password;
+	
 	private String address;
 	
 	
@@ -43,12 +43,7 @@ public class UserResponse {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	public String getPassword() {
-		return password;
-	}
-	public void setPassword(String password) {
-		this.password = password;
-	}
+	
 	
 	
 	
